@@ -3,6 +3,7 @@
     margin: 24px;
     padding: 24px;
     box-shadow: 0px 0px 24px 0px gray;
+    border-radius: 12px;
 }
 .card img
 {

@@ -1,4 +1,8 @@
 
+.lds-spinner {
+  /* change color here */
+  color: #1c4c5b
+}
 .lds-spinner,
 .lds-spinner div,
 .lds-spinner div:after {
