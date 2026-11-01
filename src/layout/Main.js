@@ -31,7 +31,7 @@ class Main extends React.Component
             <div className="main">
                 <Search searchMovie={this.searchMovie}/>
                 {
-                    this.state.movies.length == 0 ? <Preloader /> :
+                    this.state.movies.length === 0 ? <Preloader /> :
                         <MovieList movies={this.state.movies} />
                 }
             </div>
