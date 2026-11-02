@@ -18,9 +18,11 @@ class Main extends React.Component
             .then(data => this.setState({movies: data.Search}));
     }
 
-    searchMovie = (str) =>
+    searchMovie = (str, type = 'all') =>
     {
-        fetch(`https://www.omdbapi.com/?s=${str}&apikey=e81fa875`)
+        let search_string = `https://www.omdbapi.com/?s=${str}${type !== 'all' ? `&type=${type}` : ''}&apikey=e81fa875`;
+        console.log(search_string);
+        fetch(search_string)
             .then(response => response.json())
             .then(data => this.setState({movies: data.Search}));
     }
@@ -31,7 +33,8 @@ class Main extends React.Component
             <div className="main">
                 <Search searchMovie={this.searchMovie}/>
                 {
-                    this.state.movies.length === 0 ? <Preloader /> :
+                    this.state.movies == null ? <h1>Nothing</h1> : 
+                        this.state.movies.length == 0 ? <Preloader /> :
                         <MovieList movies={this.state.movies} />
                 }
             </div>
