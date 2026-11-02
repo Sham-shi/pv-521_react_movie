@@ -1,6 +1,13 @@
 .movies
 {
-    justify-content: space-around;
+    /* justify-content: space-around;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap; */
+    
+    display: grid;
+    /* Адаптивные колонки: минимум 280px, максимум растягиваются на доступное место */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px; /* Отступы между карточками (заменяет margin у самой карточки) */
+    padding: 24px;
+    justify-items: center; /* Центрируем карточки внутри их ячеек */
 }

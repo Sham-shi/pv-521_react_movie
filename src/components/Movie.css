@@ -1,12 +1,77 @@
 .card
 {
-    margin: 24px;
+    /* margin: 24px;
+    padding: 24px;
+    box-shadow: 0px 0px 24px 0px gray;
+    border-radius: 12px; */
+
+    /* Убираем margin, так как теперь используем gap в родителе */
+    margin: 0; 
     padding: 24px;
     box-shadow: 0px 0px 24px 0px gray;
     border-radius: 12px;
+    
+    /* Делаем карточку флекс-колонкой, чтобы она заполняла всю высоту ячейки Grid */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 350px; /* Ограничиваем максимальную ширину для красоты */
+    height: 100%; 
+    box-sizing: border-box;
 }
     .card img
     {
-        max-width: 300px;
-        max-height: 400px;
+        /* max-width: 300px;
+        max-height: 400px; */
+
+        width: 100%;
+        height: 400px; /* ФИКСИРОВАННАЯ высота для области изображения */
+        object-fit: cover; /* Изображение заполнит область, не искажаясь */
+        border-radius: 8px;
+        background-color: #e0e0e0; /* Цвет-заглушка, если изображения нет или оно грузится */
+        flex-shrink: 0; /* Запрещаем изображению сжиматься */
+        display: block; /* Убирает нижний отступ, характерный для inline-элементов */
     }
+
+/* Опционально: для текстового контента внутри карточки */
+.card-content {
+    flex-grow: 1; /* Заставляет текст занимать всё оставшееся пространство */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Например, чтобы прижать кнопку к низу */
+    padding-top: 16px;
+    text-align: center;
+}
+
+.card-image-placeholder {
+    width: 100%;
+    height: 400px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 16px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.movie-year
+{
+    margin: 0;
+    color: #666;
+}
+
+.movie-title
+{
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    /* Ограничиваем заголовок 2 строками, чтобы он не раздувал карточку */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 2;
+}

@@ -22,6 +22,7 @@ class Main extends React.Component
     {
         let search_string = `https://www.omdbapi.com/?s=${str}${type !== 'all' ? `&type=${type}` : ''}&apikey=e81fa875`;
         console.log(search_string);
+        
         fetch(search_string)
             .then(response => response.json())
             .then(data => this.setState({movies: data.Search}));
