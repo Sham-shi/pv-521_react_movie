@@ -8,31 +8,42 @@ class Main extends React.Component
 {
     state = 
     {
-        movies:[]
+        movies: [],
+        count: 0
     }
 
     componentDidMount()
     {
-        fetch('https://www.omdbapi.com/?s=Matrix&apikey=e81fa875')
+        this.searchMovie('Matrix');
+
+        /*let search_string = `https://www.omdbapi.com/?s=Matrix&type=all&page=1&apikey=e81fa875`;
+        // console.log(search_string);
+
+        fetch(search_string)
             .then(response => response.json())
-            .then(data => this.setState({movies: data.Search}));
+            .then(data => this.setState({movies: data.Search, count:data.totalResults}));*/
+        
+            /*fetch('https://www.omdbapi.com/?s=Matrix&apikey=e81fa875')
+            .then(response => response.json())
+            .then(data => this.setState({movies: data.Search}));*/
     }
 
-    searchMovie = (str, type = 'all') =>
+    searchMovie = (str, type = 'all', page) =>
     {
-        let search_string = `https://www.omdbapi.com/?s=${str}${type !== 'all' ? `&type=${type}` : ''}&apikey=e81fa875`;
-        console.log(search_string);
+        let search_string = `https://www.omdbapi.com/?s=${str}${type !== 'all' ? `&type=${type}` : ''}&page=${page}&apikey=e81fa875`;
+        // console.log(search_string);
         
         fetch(search_string)
             .then(response => response.json())
-            .then(data => this.setState({movies: data.Search}));
+            .then(data => this.setState({movies: data.Search, count: data.totalResults}));
+            // .then(data => this.setState({movies: data.Search}));
     }
 
     render()
     {
         return (
             <div className="main">
-                <Search searchMovie={this.searchMovie}/>
+                <Search searchMovie={this.searchMovie} totalCount={this.state.count}/>
                 {
                     this.state.movies == null ? <h1>Nothing</h1> : 
                         this.state.movies.length == 0 ? <Preloader /> :
