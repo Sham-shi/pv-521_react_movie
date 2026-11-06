@@ -8,7 +8,7 @@ class Search extends React.Component
         search: "",
         type: "all",
         page: 1,
-        // totalPages: 1
+        itemsPerPage: 10
     }
 
     // componentDidMount()
@@ -46,9 +46,12 @@ class Search extends React.Component
 
     nextPage = () =>
     {
+        // const totalPages = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
+
         this.setState
         (
             () => ({page: this.state.page + 1}),
+            // () => (this.state.page < totalPages ? {page: this.state.page + 1} : {page: totalPages}),
             () => {this.props.searchMovie(this.state.search, this.state.type, this.state.page)}
         )
     }
@@ -64,9 +67,8 @@ class Search extends React.Component
 
     render()
     {
-        let itemsPerPage = 10;
-        let totalPages = Math.ceil(this.props.totalCount / itemsPerPage);
-        // this.setState({totalPages: Math.ceil(this.props.totalCount / itemsPerPage)});
+        // let itemsPerPage = 10;
+        const totalPages = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
 
         let number = [];
         for (let i = 0; i < totalPages; i++)
@@ -132,8 +134,10 @@ class Search extends React.Component
                 </div>
 
                 <div className="pagination">
-                    <button className="btn" onClick={this.prevPage}>
-                        {"<<"} Prev
+                    <button className="btn" 
+                            onClick={this.prevPage} 
+                            disabled={this.state.page <= 1}>
+                        {"<< Prev"}
                     </button>
                     <div className="items">
                         {
@@ -150,8 +154,10 @@ class Search extends React.Component
                             )
                         }
                     </div>
-                    <button className="btn" onClick={this.nextPage}>
-                        Next {">>"}
+                    <button className="btn" 
+                            onClick={this.nextPage}
+                            disabled={this.state.page >= totalPages}>
+                        {"Next >>"}
                     </button>
                 </div>
             </>
