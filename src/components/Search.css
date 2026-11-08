@@ -30,13 +30,19 @@
 .pagination
 {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     margin: 24px;
+    gap: 20px;
 }
-.btn-current-page
-{
-    background-color: black;
-    color: white;
-    font-weight: 800;
-}
+    .pagination-ellipsis
+    {
+        cursor: default;
+        margin: 3px;
+    }
+    .btn-current-page
+    {
+        background-color: black;
+        color: white;
+        font-weight: 800;
+    }

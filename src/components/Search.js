@@ -11,12 +11,6 @@ class Search extends React.Component
         itemsPerPage: 10
     }
 
-    // componentDidMount()
-    // {
-    //     let itemsPerPage = 10;
-    //     this.setState({totalPages: Math.ceil(this.props.totalCount / itemsPerPage)});
-    // }
-
     handleKey = (event) =>
     {
         if (event.key === "Enter")
@@ -30,7 +24,7 @@ class Search extends React.Component
     {
         this.setState
         (
-            () => ({type: event.target.dataset.type}),
+            () => ({type: event.target.dataset.type, page: 1}),
             () => ({search: this.props.searchMovie(this.state.search, this.state.type) })
         )
     }
@@ -39,40 +33,74 @@ class Search extends React.Component
     {
         this.setState
         (
-            () => (this.state.page > 1 ? {page:this.state.page - 1} : {page:1}),
+            (prevState) => 
+            {
+                if(prevState.page <= 1) return null;
+
+                return {page: prevState.page - 1}
+            },
+            // () => (this.state.page > 1 ? {page:this.state.page - 1} : {page:1}),
             () => {this.props.searchMovie(this.state.search, this.state.type, this.state.page)}
         )
     }
 
     nextPage = () =>
     {
-        // const totalPages = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
+        const totalPages = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
 
         this.setState
         (
-            () => ({page: this.state.page + 1}),
-            // () => (this.state.page < totalPages ? {page: this.state.page + 1} : {page: totalPages}),
+            (prevState) => 
+            {
+                if(prevState.page >= totalPages) return null;
+
+                return {page: prevState.page + 1}
+            },
+            // () => ({page: this.state.page + 1}),
             () => {this.props.searchMovie(this.state.search, this.state.type, this.state.page)}
         )
     }
 
-    setPage = (pageNumder) =>
+    setPage = (pageNumber) =>
     {
         this.setState
         (
-            () => ({page: pageNumder}),
+            () => ({page: pageNumber}),
             () => (this.props.searchMovie(this.state.search, this.state.type, this.state.page))
         )
     }
 
     render()
     {
-        // let itemsPerPage = 10;
-        const totalPages = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
+        let totalPages = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
+
+        // let start = Math.max(0, this.state.page - 6);
+        // let end = Math.min(start + 10, totalPages);
+        // start = Math.max(0, end - 10);
 
         let number = [];
-        for (let i = 0; i < totalPages; i++)
-            number.push(i+1);
+
+        if(totalPages < 10)
+        {
+            for (let i = 0; i < totalPages; i++)
+                number.push(i+1);
+        }
+        else
+        {
+            number.push(1);
+
+            let start = Math.max(2, this.state.page - 2);
+            let end = Math.min(totalPages - 1, this.state.page + 2);
+
+            if(this.state.page - 1 > 3) number.push('...');
+
+            for(let i = start; i <= end; i++)
+                number.push(i);
+
+            if(totalPages - this.state.page > 3) number.push('...');
+
+            number.push(totalPages);
+        }
 
         return (
             <>
@@ -141,16 +169,27 @@ class Search extends React.Component
                     </button>
                     <div className="items">
                         {
-                            number.slice(0, totalPages)
-                            .map
+                            number.map //.slice(start, end)
                             (
                                 (element, index) => 
-                                (
-                                    <button className={element == this.state.page ? "btn-current-page" : ""}
-                                            onClick={() => (this.setPage(element))}>
-                                        {element}
-                                    </button>
-                                )
+                                {
+                                    if(element === '...')
+                                    {
+                                        return (
+                                            <span key={index} className="pagination-ellipsis">
+                                                {element}
+                                            </span>
+                                        );
+                                    }
+                                    
+                                    return (
+                                        <button key={index}
+                                                className={element == this.state.page ? "btn-current-page" : ""}
+                                                onClick={() => (this.setPage(element))}>
+                                            {element}
+                                        </button>
+                                    );
+                                }
                             )
                         }
                     </div>
