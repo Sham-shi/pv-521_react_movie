@@ -14,7 +14,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 350px; /* Ограничиваем максимальную ширину для красоты */
+    max-width: 350px;
     height: 100%; 
     box-sizing: border-box;
 
@@ -26,10 +26,10 @@
         max-height: 400px; */
 
         width: 100%;
-        height: 400px; /* ФИКСИРОВАННАЯ высота для области изображения */
+        height: 400px;
         object-fit: cover; /* Изображение заполнит область, не искажаясь */
         border-radius: 8px;
-        background-color: #e0e0e0; /* Цвет-заглушка, если изображения нет или оно грузится */
+        background-color: #e0e0e0;
         flex-shrink: 0; /* Запрещаем изображению сжиматься */
         display: block; /* Убирает нижний отступ, характерный для inline-элементов */
     }
@@ -40,12 +40,11 @@
         box-shadow: 0px 0px 15px 0px black;
     }
 
-/* Опционально: для текстового контента внутри карточки */
 .card-content {
     flex-grow: 1; /* Заставляет текст занимать всё оставшееся пространство */
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Например, чтобы прижать кнопку к низу */
+    justify-content: space-between;
     padding-top: 16px;
     text-align: center;
 }

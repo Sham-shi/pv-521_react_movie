@@ -1,5 +1,6 @@
 import "./Search.css";
 import React from "react";
+import JumpMenu from "./JumpMenu";
 
 class Search extends React.Component
 {
@@ -8,7 +9,9 @@ class Search extends React.Component
         search: "",
         type: "all",
         page: 1,
-        itemsPerPage: 10
+        itemsPerPage: 10,
+        showJumpMenuIndex: null,
+        jumpPageInput: ""
     }
 
     handleKey = (event) =>
@@ -22,11 +25,40 @@ class Search extends React.Component
 
     handleFilter = (event) =>
     {
+        let newType = event.target.dataset.type;
+
         this.setState
         (
-            () => ({type: event.target.dataset.type, page: 1}),
-            () => ({search: this.props.searchMovie(this.state.search, this.state.type) })
+            {type: newType, page: 1},
+            () => {this.props.searchMovie(this.state.search, newType, 1) }
         )
+    }
+
+    handleJumpInputChange = (event) => 
+    {
+        this.setState({jumpPageInput: event.target.value});
+    }
+
+    handleJumpGo = () =>
+    {
+        let targetPage = parseInt(this.state.jumpPageInput, 10);
+        let totalPages = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
+
+        if(!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages)
+            this.setPage(targetPage);
+        else
+            this.setPage(totalPages);
+
+        this.setState({showJumpMenuIndex: null});
+    }
+
+    toggleJumpMenu = (index) =>
+    {
+        this.setState (prevState => 
+        ({
+            showJumpMenuIndex: prevState.showJumpMenuIndex === index ? null : index,
+            jumpPageInput: prevState.page.toString()
+        }));
     }
 
     prevPage = () => 
@@ -73,10 +105,6 @@ class Search extends React.Component
     render()
     {
         let totalPages = Math.ceil(this.props.totalCount / this.state.itemsPerPage);
-
-        // let start = Math.max(0, this.state.page - 6);
-        // let end = Math.min(start + 10, totalPages);
-        // start = Math.max(0, end - 10);
 
         let number = [];
 
@@ -128,7 +156,7 @@ class Search extends React.Component
                             name="type" 
                             id="radio-all"
                             data-type="all"
-                            cheked={this.state.type === 'all'}
+                            checked={this.state.type === 'all'}
                             onChange={this.handleFilter}
                     />
                     <label htmlFor="radio-all">All</label>
@@ -137,7 +165,7 @@ class Search extends React.Component
                             name="type" 
                             id="radio-movie"
                             data-type="movie"
-                            cheked={this.state.type === 'movie'}
+                            checked={this.state.type === 'movie'}
                             onChange={this.handleFilter}
                     />
                     <label htmlFor="radio-movie">Movies</label>
@@ -146,7 +174,7 @@ class Search extends React.Component
                             name="type" 
                             id="radio-series"
                             data-type="series"
-                            cheked={this.state.type === 'series'}
+                            checked={this.state.type === 'series'}
                             onChange={this.handleFilter}
                     />
                     <label htmlFor="radio-series">Series</label>
@@ -155,7 +183,7 @@ class Search extends React.Component
                             name="type" 
                             id="radio-game"
                             data-type="game"
-                            cheked={this.state.type === 'game'}
+                            checked={this.state.type === 'game'}
                             onChange={this.handleFilter}
                     />
                     <label htmlFor="radio-game">Games</label>
@@ -176,9 +204,28 @@ class Search extends React.Component
                                     if(element === '...')
                                     {
                                         return (
-                                            <span key={index} className="pagination-ellipsis">
-                                                {element}
-                                            </span>
+                                            <div key={index} style={{position: 'relative', display: 'inline-block'}}>
+                                                <button key={index} 
+                                                        className="btn-pagination-ellipsis"
+                                                        onClick={() => (this.toggleJumpMenu(index))}>
+                                                    {element}
+                                                </button>
+
+                                                {this.state.showJumpMenuIndex === index && (
+                                                    <JumpMenu 
+                                                        totalPages={totalPages}
+                                                        jumpPageInput={this.state.jumpPageInput}
+                                                        onInputChange={this.handleJumpInputChange}
+                                                        onIncrement={() => this.setState(prev => ({ 
+                                                            jumpPageInput: (parseInt(prev.jumpPageInput) || 0) + 1 
+                                                        }))}
+                                                        onDecrement={() => this.setState(prev => ({ 
+                                                            jumpPageInput: Math.max(1, (parseInt(prev.jumpPageInput) || 1) - 1) 
+                                                        }))}
+                                                        onGo={this.handleJumpGo}
+                                                    />
+                                                )} 
+                                            </div>
                                         );
                                     }
                                     

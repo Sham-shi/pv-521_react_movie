@@ -20,6 +20,7 @@
         }
     .search > button
     {
+        cursor: pointer;
         background-color: white;
         color: #fff;
         width: 50px;
@@ -35,14 +36,16 @@
     margin: 24px;
     gap: 20px;
 }
-    .pagination-ellipsis
-    {
-        cursor: default;
-        margin: 3px;
-    }
     .btn-current-page
     {
         background-color: black;
         color: white;
         font-weight: 800;
+    }
+    .btn-left-pagination-ellipsis,
+    .btn-right-pagination-ellipsis
+    {
+        cursor: pointer;
+        color: #666;
+        font-weight: bold;
     }
